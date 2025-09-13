@@ -3352,4 +3352,82 @@ Synchronizing state of postfix.service with SysV service script with /usr/lib/sy
 Executing: /usr/lib/systemd/systemd-sysv-install enable postfix
 Synchronizing state of dovecot.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
 Executing: /usr/lib/systemd/systemd-sysv-install enable dovecot
-root@mail-server:/mnt/data/mail# 
+root@mail-server:/mnt/data/mail# sudo lsblk
+NAME    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+loop0     7:0    0 49.1M  1 loop /snap/core18/2925
+loop1     7:1    0 84.6M  1 loop /snap/oracle-cloud-agent/107
+loop2     7:2    0 42.9M  1 loop /snap/snapd/24787
+sda       8:0    0   50G  0 disk 
+├─sda1    8:1    0   49G  0 part /
+├─sda15   8:15   0   99M  0 part /boot/efi
+└─sda16 259:0    0  923M  0 part /boot
+sdb       8:16   0   50G  0 disk /mnt/data
+root@mail-server:/mnt/data/mail# cd
+root@mail-server:~# mount | grep /mnt/data
+/dev/sdb on /mnt/data type ext4 (rw,relatime,stripe=256)
+root@mail-server:~# ├─sda15   8:15   0   99M  0 part /boot/efi
+└─sda16 259:0    0  923M  0 part /boot
+sdb       8:16   0   50G  0 disk /mnt/data
+root@mail-server:/mnt/data/mail# cd
+root@mail-server:~# mount | grep /mnt/data
+/dev/sdb on /mnt/data type ext4 (rw,relatime,stripe=256)
+root@mail-server:~# 
+bash: ├─sda15: command not found
+bash: └─sda16: command not found
+bash: sdb: command not found
+bash: root@mail-server:/mnt/data/mail#: No such file or directory
+bash: root@mail-server:~#: command not found
+bash: syntax error near unexpected token `('
+bash: root@mail-server:~#: command not found
+root@mail-server:~# sudo blkid /dev/sdb
+/dev/sdb: UUID="e3abe870-7fb2-48d1-badf-1c6f518724f2" BLOCK_SIZE="4096" TYPE="ext4"
+root@mail-server:~# sudo nano /etc/fstab
+root@mail-server:~# sudo umount /mnt/data
+sudo mount -a
+mount: (hint) your fstab has been modified, but systemd still uses
+       the old version; use 'systemctl daemon-reload' to reload.
+mount: /mnt/data: /dev/sdb already mounted or mount point busy.
+       dmesg(1) may have more information after failed mount system call.
+root@mail-server:~# sudo blkid /dev/sdb
+# UUID="e3abe870-7fb2-48d1-badf-1c6f518724f2"
+/dev/sdb: UUID="e3abe870-7fb2-48d1-badf-1c6f518724f2" BLOCK_SIZE="4096" TYPE="ext4"
+root@mail-server:~# sudo nano /etc/apache2/sites-available/mail.zovenax.com.conf
+root@mail-server:~# sudo a2enmod rewrite
+Enabling module rewrite.
+To activate the new configuration, you need to run:
+  systemctl restart apache2
+root@mail-server:~# systemctl restart apache2
+root@mail-server:~# sudo a2enmod rewrite
+Module rewrite already enabled
+root@mail-server:~# sudo a2ensite mail.zovenax.com.conf
+sudo a2ensite mail.zovenax.com.conf
+Site mail.zovenax.com already enabled
+Site mail.zovenax.com already enabled
+root@mail-server:~# sudo systemctl restart apache2
+root@mail-server:~# sudo a2enmod rewrite
+sudo a2enmod ssl
+sudo a2enmod headers
+Module rewrite already enabled
+Considering dependency mime for ssl:
+Module mime already enabled
+Considering dependency socache_shmcb for ssl:
+Module socache_shmcb already enabled
+Module ssl already enabled
+Enabling module headers.
+To activate the new configuration, you need to run:
+  systemctl restart apache2
+root@mail-server:~# sudo a2ensite mail.zovenax.com.conf
+Site mail.zovenax.com already enabled
+root@mail-server:~# sudo apache2ctl configtest
+sudo systemctl restart apache2
+AH00112: Warning: DocumentRoot [/var/www/mail] does not exist
+AH00112: Warning: DocumentRoot [/var/www/mail] does not exist
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+Syntax OK
+root@mail-server:~# sudo nano /etc/apache2/sites-available/mail.zovenax.com.conf
+root@mail-server:~# sudo apache2ctl configtest
+sudo systemctl restart apache2
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+Syntax OK
+root@mail-server:~# sudo systemctl restart apache2
+root@mail-server:~# 
