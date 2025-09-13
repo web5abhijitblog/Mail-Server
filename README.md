@@ -5,3 +5,5 @@ Public IP address 161.118.169.180
 Copy
 Username
 ubuntu
+# Instance OCID
+ocid1.instance.oc1.ap-mumbai-1.anrg6ljrxgbuuxqcvws5qpevhbljihk3bqxrvzeoqokkmvmrhxcebw4egalq
