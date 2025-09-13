@@ -3430,4 +3430,154 @@ sudo systemctl restart apache2
 AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
 Syntax OK
 root@mail-server:~# sudo systemctl restart apache2
-root@mail-server:~# 
+root@mail-server:~# sudo nano /etc/apache2/sites-available/mail.zovenax.com.conf
+root@mail-server:~# sudo apache2ctl configtest
+sudo systemctl restart apache2
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+Syntax OK
+root@mail-server:~# sudo certbot renew --dry-run
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Processing /etc/letsencrypt/renewal/mail.zovenax.com.conf
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Account registered.
+Simulating renewal of an existing certificate for mail.zovenax.com
+Waiting 10 seconds for DNS changes to propagate
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Congratulations, all simulated renewals succeeded: 
+  /etc/letsencrypt/live/mail.zovenax.com/fullchain.pem (success)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+root@mail-server:~# sudo systemctl status certbot.timer
+● certbot.timer - Run certbot twice daily
+     Loaded: loaded (/usr/lib/systemd/system/certbot.timer; enabled; preset: enabled)
+     Active: active (waiting) since Sun 2025-09-14 00:13:15 IST; 2h 5min ago
+    Trigger: Sun 2025-09-14 14:13:09 IST; 11h left
+   Triggers: ● certbot.service
+
+Sep 14 00:13:15 mail-server systemd[1]: Started certbot.timer - Run certbot twice daily.
+root@mail-server:~# sudo nano /etc/apache2/apache2.conf
+root@mail-server:~# sudo systemctl restart apache2
+root@mail-server:~# ls
+cloudflare.ini  snap
+root@mail-server:~# cd /mnt/data
+root@mail-server:/mnt/data# ls
+lost+found  mail
+root@mail-server:/mnt/data# cd mail
+root@mail-server:/mnt/data/mail#  ls
+root@mail-server:/mnt/data/mail# # Dovecot status
+sudo systemctl status dovecot
+
+# Postfix status (SMTP server)
+sudo systemctl status postfix
+
+# বা check কোন process port এ listen করছে
+sudo ss -tulpn | grep -E "25|465|587|993"
+
+# বা apt এ install check
+dpkg -l | grep -E "postfix|dovecot|exim"
+● dovecot.service - Dovecot IMAP/POP3 email server
+     Loaded: loaded (/usr/lib/systemd/system/dovecot.service; enabled; preset: enabled)
+     Active: active (running) since Sun 2025-09-14 01:06:52 IST; 1h 15min ago
+       Docs: man:dovecot(1)
+             https://doc.dovecot.org/
+   Main PID: 29207 (dovecot)
+     Status: "v2.3.21 (47349e2482) running"
+      Tasks: 4 (limit: 7017)
+     Memory: 3.2M (peak: 3.3M)
+        CPU: 25ms
+     CGroup: /system.slice/dovecot.service
+             ├─29207 /usr/sbin/dovecot -F
+             ├─29208 dovecot/anvil
+             ├─29209 dovecot/log
+             └─29210 dovecot/config
+
+Sep 14 01:06:52 mail-server systemd[1]: Starting dovecot.service - Dovecot IMAP/POP3 email server...
+Sep 14 01:06:52 mail-server dovecot[29207]: master: Dovecot v2.3.21 (47349e2482) starting up for imap, lmtp, pop3 (core dumps di>Sep 14 01:06:52 mail-server systemd[1]: Started dovecot.service - Dovecot IMAP/POP3 email server.
+...skipping...
+● dovecot.service - Dovecot IMAP/POP3 email server
+     Loaded: loaded (/usr/lib/systemd/system/dovecot.service; enabled; preset: enabled)
+     Active: active (running) since Sun 2025-09-14 01:06:52 IST; 1h 15min ago
+       Docs: man:dovecot(1)
+             https://doc.dovecot.org/
+   Main PID: 29207 (dovecot)
+     Status: "v2.3.21 (47349e2482) running"
+      Tasks: 4 (limit: 7017)
+     Memory: 3.2M (peak: 3.3M)
+        CPU: 25ms
+     CGroup: /system.slice/dovecot.service
+             ├─29207 /usr/sbin/dovecot -F
+             ├─29208 dovecot/anvil
+             ├─29209 dovecot/log
+             └─29210 dovecot/config
+
+Sep 14 01:06:52 mail-server systemd[1]: Starting dovecot.service - Dovecot IMAP/POP3 email server...
+Sep 14 01:06:52 mail-server dovecot[29207]: master: Dovecot v2.3.21 (47349e2482) starting up for imap, lmtp, pop3 (core dumps di>Sep 14 01:06:52 mail-server systemd[1]: Started dovecot.service - Dovecot IMAP/POP3 email server.
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+
+● postfix.service - Postfix Mail Transport Agent
+     Loaded: loaded (/usr/lib/systemd/system/postfix.service; enabled; preset: enabled)
+     Active: active (exited) since Sun 2025-09-14 00:34:28 IST; 1h 49min ago
+       Docs: man:postfix(1)
+   Main PID: 27021 (code=exited, status=0/SUCCESS)
+        CPU: 2ms
+
+Sep 14 00:34:28 mail-server systemd[1]: Starting postfix.service - Postfix Mail Transport Agent...
+Sep 14 00:34:28 mail-server systemd[1]: Finished postfix.service - Postfix Mail Transport Agent.
+tcp   LISTEN 0      100              0.0.0.0:993       0.0.0.0:*    users:(("dovecot",pid=29207,fd=42))                                                                                                                                      
+tcp   LISTEN 0      100              0.0.0.0:25        0.0.0.0:*    users:(("master",pid=27017,fd=13))                                                                                                                                       
+tcp   LISTEN 0      100                 [::]:993          [::]:*    users:(("dovecot",pid=29207,fd=43))                                                                                                                                      
+tcp   LISTEN 0      100                 [::]:995          [::]:*    users:(("dovecot",pid=29207,fd=25))                                                                                                                                      
+tcp   LISTEN 0      100                 [::]:25           [::]:*    users:(("master",pid=27017,fd=14))                                                                                                                                       
+ii  dovecot-core                          1:2.3.21+dfsg1-2ubuntu6                       arm64        secure POP3/IMAP server - core files
+ii  dovecot-imapd                         1:2.3.21+dfsg1-2ubuntu6                       arm64        secure POP3/IMAP server - IMAP daemon
+ii  dovecot-lmtpd                         1:2.3.21+dfsg1-2ubuntu6                       arm64        secure POP3/IMAP server - LMTP server
+ii  dovecot-mysql                         1:2.3.21+dfsg1-2ubuntu6                       arm64        secure POP3/IMAP server - MySQL support
+ii  dovecot-pop3d                         1:2.3.21+dfsg1-2ubuntu6                       arm64        secure POP3/IMAP server - POP3 daemon
+ii  postfix                               3.8.6-1build2                                 arm64        High-performance mail transport agent
+ii  postfix-mysql                         3.8.6-1build2                                 arm64        MySQL map support for Postfix
+root@mail-server:/mnt/data/mail# sudo apt update
+sudo apt install postfix -y
+Hit:1 http://ap-mumbai-1-ad-1.clouds.ports.ubuntu.com/ubuntu-ports noble InRelease
+Hit:2 http://ap-mumbai-1-ad-1.clouds.ports.ubuntu.com/ubuntu-ports noble-updates InRelease
+Hit:3 http://ports.ubuntu.com/ubuntu-ports noble-security InRelease       
+Hit:4 http://ap-mumbai-1-ad-1.clouds.ports.ubuntu.com/ubuntu-ports noble-backports InRelease
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+4 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+postfix is already the newest version (3.8.6-1build2).
+0 upgraded, 0 newly installed, 0 to remove and 4 not upgraded.
+root@mail-server:/mnt/data/mail# sudo systemctl status postfix
+● postfix.service - Postfix Mail Transport Agent
+     Loaded: loaded (/usr/lib/systemd/system/postfix.service; enabled; preset: enabled)
+     Active: active (exited) since Sun 2025-09-14 00:34:28 IST; 1h 49min ago
+       Docs: man:postfix(1)
+   Main PID: 27021 (code=exited, status=0/SUCCESS)
+        CPU: 2ms
+
+Sep 14 00:34:28 mail-server systemd[1]: Starting postfix.service - Postfix Mail Transport Agent...
+Sep 14 00:34:28 mail-server systemd[1]: Finished postfix.service - Postfix Mail Transport Agent.
+root@mail-server:/mnt/data/mail# sudo nano /etc/dovecot/conf.d/10-master.conf
+root@mail-server:/mnt/data/mail# sudo systemctl restart dovecot
+root@mail-server:/mnt/data/mail#   sudo nano /etc/dovecot/conf.d/10-ssl.conf
+root@mail-server:/mnt/data/mail# 
